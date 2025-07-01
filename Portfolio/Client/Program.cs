@@ -4,6 +4,9 @@ using Portfolio.Client;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
+builder.Services.AddScoped(sp =>
+    new HttpClient { BaseAddress = new Uri("https://ton-api-railway/api/") });
+
 // 🔌 Lien vers ton composant racine Blazor
 builder.RootComponents.Add<App>("#app");
 

@@ -32,7 +32,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
                 "https://localhost:5172",         // Front local Blazor WebAssembly
-                "https://tonsite.netlify.app"     // Domaine de production (Netlify)
+                "https://https://portfolio-sachamachadoalbino.netlify.app/"     // Domaine de production (Netlify)
             )
             .AllowAnyMethod()    // Autorise toutes les méthodes HTTP : GET, POST, etc.
             .AllowAnyHeader();   // Autorise tous les headers (utile pour JSON, Auth...)
