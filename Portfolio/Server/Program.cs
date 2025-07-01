@@ -9,6 +9,8 @@ builder.Configuration
 
 builder.Configuration.AddEnvironmentVariables();
 
+
+
 // Voir les erreurs dans la console
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -59,8 +61,17 @@ else
     app.UseHsts();
 }
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy => policy
+            .WithOrigins("https://portfolio-sachamachadoalbino.netlify.app")
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 // Active le CORS pour permettre les appels cross-origin du client
-app.UseCors();
+app.UseCors("AllowFrontend");
 
 // Redirige automatiquement HTTP → HTTPS
 app.UseHttpsRedirection();
