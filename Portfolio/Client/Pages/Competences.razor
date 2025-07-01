@@ -1,0 +1,186 @@
+﻿@page "/competences"
+@using System.Collections.Generic
+
+<div class="container py-5">
+    @if (SelectedCategory == null)
+    {
+        <h2 class="mb-4">Mes compétences</h2>
+    }
+    else
+    {
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="m-0">@SelectedCategory?.Name</h2>
+            <button class="btn btn-back" @onclick="ClearSelection" title="Retour">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+        </div>
+    }
+
+    @if (SelectedCategory == null)
+    {
+        <!-- Cartes de catégories -->
+        <div class="row justify-content-center g-4">
+            @foreach (var category in categories)
+            {
+                <div class="col-md-4">
+                    <div class="card category-card text-center h-100 shadow-sm" @onclick="@(() => SelectCategory(category.Name))" style="cursor: pointer;">
+                        <div class="card-body">
+                            <i class="@category.Icon fs-1 mb-3" style="color: mediumseagreen"></i>
+                            <h5 class="card-title">@category.Name</h5>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+
+        <!-- Compétences de la catégorie -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var skill in SelectedCategory?.Skills ?? new List<Skill>())
+            {
+                <div class="col">
+                    <div class="card skill-card h-100 shadow-sm">
+                        <div class="card-body d-flex align-items-center">
+                            <i class="@skill.Icon me-3" style="font-size: 1.2rem; color: mediumseagreen;"></i>
+                            <span>@skill.Name</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    class Skill
+    {
+        public string Name { get; set; } = "";
+        public string Icon { get; set; } = "";
+    }
+
+    class Category
+    {
+        public string Name { get; set; } = "";
+        public string Icon { get; set; } = "";
+        public List<Skill> Skills { get; set; } = new();
+    }
+
+    List<Category> categories = new()
+    {
+        new Category
+        {
+            Name = "Développement",
+            Icon = "bi bi-code-slash",
+            Skills = new()
+            {
+                new() { Name = "C#", Icon = "devicon-csharp-plain" },
+                new() { Name = "JavaScript", Icon = "devicon-javascript-plain" },
+                new() { Name = "HTML/CSS", Icon = "devicon-html5-plain" },
+                new() { Name = "Angular", Icon = "devicon-angularjs-plain" },
+                new() { Name = "Blazor", Icon = "bi bi-braces" },
+                new() { Name = ".NET", Icon = "devicon-dotnetcore-plain" },
+                new() { Name = "ASP.NET", Icon = "bi bi-code" },
+                new() { Name = "Entity Framework", Icon = "bi bi-database" },
+                new() { Name = "ADO.NET", Icon = "bi bi-plug" },
+                new() { Name = "LINQ", Icon = "bi bi-filter" },
+                new() { Name = "APIs REST", Icon = "bi bi-arrow-left-right" },
+                new() { Name = "UML", Icon = "bi bi-diagram-3" },
+                new() { Name = "PHP", Icon = "devicon-php-plain" },
+                new() { Name = "Python", Icon = "devicon-python-plain" }
+            }
+        },
+        new Category
+        {
+            Name = "Réseau",
+            Icon = "bi bi-diagram-3",
+            Skills = new()
+            {
+                new() { Name = "TCP/IP", Icon = "bi bi-plug" },
+                new() { Name = "DHCP", Icon = "bi bi-wifi" },
+                new() { Name = "DNS", Icon = "bi bi-globe" },
+                new() { Name = "Switching", Icon = "bi bi-hdd-network" },
+                new() { Name = "Routing", Icon = "bi bi-diagram-3" },
+                new() { Name = "Cisco CCST", Icon = "bi bi-shield-lock" },
+                new() { Name = "Sécurité réseau", Icon = "bi bi-lock" },
+                new() { Name = "Wireshark", Icon = "bi bi-graph-up" },
+                new() { Name = "VPN", Icon = "bi bi-shield-check" },
+                new() { Name = "Configuration Cisco", Icon = "bi bi-terminal" },
+                new() { Name = "Subnetting", Icon = "bi bi-diagram-3" },
+                new() { Name = "Firewall", Icon = "bi bi-exclamation-triangle" },
+                new() { Name = "LAN/WAN", Icon = "bi bi-hdd-stack" }
+            }
+        },
+        new Category
+        {
+            Name = "Bureautique",
+            Icon = "bi bi-file-earmark-text",
+            Skills = new()
+            {
+                new() { Name = "Word", Icon = "bi bi-file-word" },
+                new() { Name = "Excel", Icon = "bi bi-file-excel" },
+                new() { Name = "PowerPoint", Icon = "bi bi-file-earmark-ppt" },
+                new() { Name = "Outlook", Icon = "bi bi-envelope" },
+                new() { Name = "Teams", Icon = "bi bi-people" },
+                new() { Name = "Google Docs", Icon = "bi bi-file-earmark-text" },
+                new() { Name = "Office 365", Icon = "bi bi-windows" },
+                new() { Name = "ServiceNow", Icon = "bi bi-gear" }
+            }
+        },
+        new Category
+        {
+            Name = "Systèmes & Cloud",
+            Icon = "bi bi-cloud",
+            Skills = new()
+            {
+                new() { Name = "Windows", Icon = "devicon-windows8-original" },
+                new() { Name = "Linux", Icon = "devicon-linux-plain" },
+                new() { Name = "Windows Server", Icon = "bi bi-hdd" },
+                new() { Name = "Microsoft Azure", Icon = "devicon-azure-plain" },
+                new() { Name = "Bash", Icon = "devicon-bash-plain" },
+                new() { Name = "Docker", Icon = "devicon-docker-plain" },
+                new() { Name = "Kubernetes", Icon = "devicon-kubernetes-plain" }
+            }
+        },
+        new Category
+        {
+            Name = "Méthodologies",
+            Icon = "bi bi-kanban",
+            Skills = new()
+            {
+                new() { Name = "Scrum", Icon = "bi bi-kanban" },
+                new() { Name = "Agile", Icon = "bi bi-lightning" },
+                new() { Name = "Autodidaxie", Icon = "bi bi-book" },
+                new() { Name = "Documentation technique", Icon = "bi bi-journal-code" }
+            }
+        },
+        new Category
+        {
+            Name = "Matériel & Dépannage",
+            Icon = "bi bi-cpu",
+            Skills = new()
+            {
+                new() { Name = "Montage de PC", Icon = "bi bi-tools" },
+                new() { Name = "Connaissance des composants", Icon = "bi bi-motherboard" },
+                new() { Name = "Diagnostique matériel", Icon = "bi bi-bug" },
+                new() { Name = "Mise à niveau matériel", Icon = "bi bi-arrow-up-circle" },
+                new() { Name = "Choix des composants", Icon = "bi bi-pc-display" },
+                new() { Name = "Veille technologique hardware", Icon = "bi bi-search" },
+                new() { Name = "Dépannage physique", Icon = "bi bi-wrench-adjustable" }
+            }
+        }
+    };
+
+    Category? SelectedCategory;
+
+    void SelectCategory(string name)
+    {
+        SelectedCategory = categories.FirstOrDefault(c => c.Name == name);
+    }
+
+    void ClearSelection()
+    {
+        SelectedCategory = null;
+    }
+}

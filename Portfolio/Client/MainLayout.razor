@@ -1,0 +1,57 @@
+﻿@inherits LayoutComponentBase
+
+<div class="main-layout">
+    <!-- BACKDROP pour clic extérieur -->
+    <div class="menu-backdrop @(isMenuOpen ? "show" : "")" @onclick="CloseMenu"></div>
+
+    <div class="page-title-box">
+        @CurrentPageTitle
+    </div>
+
+    <button class="burger-button" @onclick="ToggleMenu" title="Menu">
+        <i class="bi @(isMenuOpen ? "bi-x-lg" : "bi-list")"></i>
+    </button>
+
+
+    <!-- Menu déroulant -->
+    <div class="floating-menu @(isMenuOpen ? "show" : "")">
+        <nav class="menu-list">
+            <NavLink href="/" class="menu-item" Match="NavLinkMatch.All" @onclick="CloseMenu"><i class="bi bi-house me-2"></i> Accueil</NavLink>
+            <NavLink href="/competences" class="menu-item" @onclick="CloseMenu"><i class="bi bi-stars me-2"></i> Compétences</NavLink>
+            <NavLink href="/projets" class="menu-item" @onclick="CloseMenu"><i class="bi bi-laptop me-2"></i> Projets</NavLink>
+            <NavLink href="/parcours" class="menu-item" @onclick="CloseMenu"><i class="bi bi-person-vcard me-2"></i> Parcours</NavLink>
+            <NavLink href="/contact" class="menu-item" @onclick="CloseMenu"><i class="bi bi-envelope me-2"></i> Contact</NavLink>
+            <a href="CV_SachaMachadoAlbino.pdf" class="menu-item" download @onclick="CloseMenu"><i class="bi bi-download me-2"></i> Télécharger CV</a>
+        </nav>
+    </div>
+
+    <!-- Contenu -->
+    <main class="content-area">
+        @Body
+    </main>
+</div>
+
+@code {
+    private bool isMenuOpen = false;
+
+    void ToggleMenu() => isMenuOpen = !isMenuOpen;
+    void CloseMenu() => isMenuOpen = false;
+
+    private MarkupString CurrentPageTitle => new(
+    NavigationManager.Uri switch
+    {
+        var uri when uri.EndsWith("/") =>
+            "<i class='bi bi-house me-2'></i>Accueil",
+        var uri when uri.Contains("/competences") =>
+            "<i class='bi bi-stars me-2'></i>Compétences",
+        var uri when uri.Contains("/projets") =>
+            "<i class='bi bi-laptop me-2'></i>Projets",
+        var uri when uri.Contains("/parcours") =>
+            "<i class='bi bi-person-vcard me-2'></i>Parcours",
+        var uri when uri.Contains("/contact") =>
+            "<i class='bi bi-envelope me-2'></i>Contact",
+        _ => ""
+    });
+
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+}

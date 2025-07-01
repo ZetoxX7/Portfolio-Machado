@@ -1,0 +1,116 @@
+﻿@page "/contact"
+
+@using System.ComponentModel.DataAnnotations          
+@using System.Net.Http.Json                           
+@using Microsoft.AspNetCore.Components.Forms         
+@inject HttpClient Http                               
+
+<!-- Titre -->
+<h3 class="mb-4">Contactez-moi</h3>
+
+<!-- Carte Bootstrap -->
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <!-- Message de succès si le formulaire a été envoyé -->
+        @if (isSubmitted)
+        {
+            <div class="alert alert-success">
+                Votre message a bien été envoyé. Merci !
+            </div>
+        }
+        else
+        {
+            <!-- Formulaire de contact -->
+            <EditForm Model="@formModel" OnValidSubmit="HandleValidSubmit">
+                <!-- Active la validation Blazor -->
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <!-- Champ : Nom -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nom</label>
+                    <InputText id="name" class="form-control" @bind-Value="formModel.Name" />
+                    <ValidationMessage For="@(() => formModel.Name)" />
+                </div>
+
+                <!-- Champ : Email -->
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <InputText id="email" type="email" class="form-control" @bind-Value="formModel.Email" />
+                    <ValidationMessage For="@(() => formModel.Email)" />
+                </div>
+
+                <!-- Champ : Message -->
+                <div class="mb-3">
+                    <label for="message" class="form-label">Message</label>
+                    <InputTextArea id="message" rows="5" class="form-control" @bind-Value="formModel.Message" />
+                    <ValidationMessage For="@(() => formModel.Message)" />
+                </div>
+
+                <!-- Bouton envoyer -->
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </EditForm>
+        }
+
+        <!-- Message d'erreur s'il y a un souci côté client ou API -->
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger mt-3">@errorMessage</div>
+        }
+    </div>
+</div>
+
+@code {
+    // Modèle de formulaire lié aux champs
+    private ContactFormModel formModel = new();
+
+    // Flag : vrai quand le message est bien envoyé
+    private bool isSubmitted = false;
+
+    // Message d'erreur (null si tout va bien)
+    private string errorMessage;
+
+    // Fonction appelée à la soumission du formulaire
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            // Appel de l’API POST /api/contact avec le contenu du formulaire
+            var response = await Http.PostAsJsonAsync("api/contact", formModel);
+
+            if (response.IsSuccessStatusCode)
+            {
+                isSubmitted = true;          // Affiche le message de confirmation
+                formModel = new();           // Réinitialise les champs du formulaire
+                errorMessage = null;
+            }
+            else
+            {
+                // Récupère le contenu brut de l’erreur renvoyée par l’API
+                var content = await response.Content.ReadAsStringAsync();
+                errorMessage = $"Erreur lors de l'envoi : {content}";
+            }
+        }
+        catch (Exception ex)
+        {
+            // Gère toute erreur côté client (réseau, format JSON, etc.)
+            errorMessage = $"Erreur côté client : {ex.Message}";
+        }
+    }
+
+    // Modèle de données local au formulaire (pas besoin de fichier séparé)
+    public class ContactFormModel
+    {
+        [Required(ErrorMessage = "Le nom est requis.")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "L'adresse email est requise.")]
+        [EmailAddress(ErrorMessage = "Adresse email invalide.")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Le message est requis.")]
+        public string Message { get; set; }
+    }
+}
+

@@ -1,0 +1,177 @@
+﻿@page "/parcours"
+@using Microsoft.AspNetCore.Components.Web
+
+@code {
+    private List<string> selectedYearRanges = new();
+
+    private readonly string[] AllYears = new[]
+    {
+        "2009-2010", "2011", "2012", "2013-2014", "2015",
+        "2016-2019", "2020", "2021", "2022-2024", "2025"
+    };
+
+    private bool dropdownOpen = false;
+
+    private void ToggleDropdown()
+    {
+        dropdownOpen = !dropdownOpen;
+    }
+
+    private void ToggleYear(string yearRange)
+    {
+        if (selectedYearRanges.Contains(yearRange))
+            selectedYearRanges.Remove(yearRange);
+        else
+            selectedYearRanges.Add(yearRange);
+    }
+
+    private bool IsSelected(string yearRange) => selectedYearRanges.Contains(yearRange);
+
+    private void ToggleAllYears()
+    {
+        if (selectedYearRanges.Count == AllYears.Length)
+            selectedYearRanges.Clear();
+        else
+            selectedYearRanges = AllYears.ToList();
+    }
+
+    private bool AllSelected
+    {
+        get => selectedYearRanges.Count == AllYears.Length;
+        set
+        {
+            if (value)
+                selectedYearRanges = AllYears.ToList();
+            else
+                selectedYearRanges.Clear();
+        }
+    }
+
+    private bool IsAllSelected => selectedYearRanges.Count == AllYears.Length;
+
+    private List<string> SortedSelectedRanges =>
+        selectedYearRanges.OrderByDescending(y => y switch
+        {
+            "2025" => 2025,
+            "2022-2024" => 2024,
+            "2021" => 2021,
+            "2020" => 2020,
+            "2016-2019" => 2019,
+            "2015" => 2015,
+            "2013-2014" => 2014,
+            "2012" => 2012,
+            "2011" => 2011,
+            "2009-2010" => 2010,
+            _ => 0
+        }).ToList();
+}
+
+<div class="container-fluid my-5">
+    <div class="d-flex flex-column flex-md-row gap-md-4 px-2 px-md-4">
+        <!-- VERSION MOBILE : dropdown -->
+        <div class="d-md-none mb-4">
+            <div class="position-relative">
+                <button class="btn btn-custom w-100" @onclick="ToggleDropdown">
+                    ↳ Sélectionne les années
+                </button>
+                @if (dropdownOpen)
+                {
+                    <div class="border border-secondary rounded bg-white shadow-sm position-absolute w-100 mt-1 p-2" style="z-index: 999;">
+                        @foreach (var year in AllYears)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="year_@year"
+                                       checked="@IsSelected(year)"
+                                       @onchange="@(() => ToggleYear(year))" />
+                                <label class="form-check-label" for="year_@year">@year</label>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="form-check mt-3">
+                <input type="checkbox"
+                       class="form-check-input"
+                       id="selectAllMobile"
+                       checked="@IsAllSelected"
+                       @onclick="ToggleAllYears" />
+                <label class="form-check-label" for="selectAllMobile">
+                    @(IsAllSelected ? "Tout désélectionner" : "Tout sélectionner")
+                </label>
+            </div>
+        </div>
+
+        <!-- VERSION DESKTOP -->
+        <div class="col-md-2 border-end mb-3 mb-md-0 pe-md-4 d-none d-md-block">
+            <h4 class="mb-4">Mon Parcours</h4>
+            <div class="d-grid gap-2 parcours-buttons">
+                @foreach (var year in AllYears)
+                {
+                    var buttonClass = IsSelected(year) ? "btn btn-custom" : "btn btn-custom-outline";
+
+                    <button class="@buttonClass"
+                            @onclick="@(() => ToggleYear(year))"
+                            @key="year">
+                        @year
+                    </button>
+                }
+            </div>
+            <div class="form-check mt-3">
+                <input type="checkbox"
+                       class="form-check-input"
+                       id="selectAllDesktop"
+                       @bind="AllSelected" />
+                <label class="form-check-label" for="selectAllDesktop">
+                    @(AllSelected ? "Tout désélectionner" : "Tout sélectionner")
+                </label>
+            </div>
+        </div>
+
+        <!-- Cartes -->
+        <div class="col-md-10 ps-md-4">
+            @if (selectedYearRanges.Any())
+            {
+                @foreach (var year in SortedSelectedRanges)
+                {
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">@year</h5>
+                            @RenderParcoursContent(year)
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">Clique ou sélectionne une ou plusieurs périodes pour voir mon évolution 😎</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private RenderFragment RenderParcoursContent(string yearRange) => yearRange switch
+    {
+        "2009-2010" => @<p>J’ai commencé l’école primaire en 2009, et c’est également à cette époque que ma passion pour les jeux vidéo est née. Très jeune, j’étais déjà attiré par l’univers du numérique et du jeu interactif, ce qui m’a très tôt familiarisé avec l’usage de l’ordinateur comme outil de loisir, puis plus tard, comme outil d’apprentissage. Cette curiosité ne m’a plus jamais quitté.</p>,
+
+    "2011" => @<p>Sortie de <strong>Skyrim</strong>, un jeu qui m’a profondément marqué. Ce fut un véritable déclic : la richesse du monde ouvert, la liberté d’action, les mods... J’ai développé un intérêt croissant pour la personnalisation des expériences numériques, ce qui allait poser les premières bases de mon futur intérêt pour l’informatique technique.</p>,
+
+    "2012" => @<p>J’ai reçu mon tout premier ordinateur portable avec un objectif clair : pouvoir jouer à Skyrim et installer des mods comme ceux que je voyais sur YouTube. Ce fut aussi ma première confrontation avec les limites matérielles : mon PC n’était pas assez puissant. Plutôt que de me décourager, cela m’a poussé à apprendre comment fonctionne un ordinateur, ce qu’est un composant, comment optimiser un système ou installer un mod manuellement. C’est ici que j’ai réellement commencé à explorer le fonctionnement des systèmes informatiques.</p>,
+
+    "2013-2014" => @<p>Je passe énormément de temps à jouer, mais aussi à bidouiller mon ordinateur. Je découvre les jeux crackés, les launchers alternatifs, et j'apprends à contourner certaines protections logicielles. Cela m’amène à utiliser des outils comme WinRAR, des fichiers `.bat`, des cracktools, etc. Même si tout cela était très expérimental et informel, c’était une véritable initiation à la logique informatique, à la gestion de fichiers, et au fonctionnement des programmes exécutables.</p>,
+
+    "2015" => @<p>Je fais ma rentrée en secondaire général, avec en parallèle l’achat de mon premier véritable setup informatique. Cela me donne davantage de possibilités pour explorer le monde du numérique de manière plus poussée. C’est une période où je prends conscience que je veux faire de l’informatique une carrière, pas juste une passion.</p>,
+
+    "2016-2019" => @<p>Ces années marquent mon immersion totale dans le monde informatique. Je démonte et remonte des PC, j’installe des distributions Linux, je découvre les environnements virtuels (VirtualBox, VMware), je m’initie aux réseaux LAN, aux serveurs Windows, au DNS, au DHCP, etc. J’achète même un modem pour m’amuser à créer mon propre réseau local. Je ne me contente pas d’utiliser l’informatique, je cherche à comprendre comment tout fonctionne, et à expérimenter concrètement.</p>,
+
+    "2020" => @<p>Je décide de changer d’école pour suivre une formation de <strong>technicien informatique</strong>. C’est un tournant décisif : je suis enfin dans un cadre qui me permet d’apprendre les bases solides du métier. J’apprends les fondamentaux du réseau (notamment Cisco), la structure des ordinateurs, la maintenance, les normes de câblage, mais aussi les premiers langages web (HTML, CSS, JS, PHP) et Python. Très rapidement, je ressens une véritable passion pour le développement. Je me mets à fréquenter des forums spécialisés (type Hack Forums, Stack Overflow) et à apprendre de manière autonome en parallèle des cours.</p>,
+
+    "2021" => @<p>Je commence un bachelier en informatique à la <strong>Haute École en Hainaut</strong>. Le début est prometteur : je découvre des aspects plus théoriques du développement, de l’algorithmique, des bases de données, de la logique orientée objet. J’ai une vraie motivation, mais je réalise rapidement que le cadre scolaire traditionnel ne correspond pas à ma manière d’apprendre. Je préfère apprendre en construisant, en testant, en explorant librement.</p>,
+
+    "2022-2024" => @<p>Cette période marque une transition importante. Je décroche progressivement de l’univers académique pour me concentrer sur une approche autodidacte. Je poursuis ma formation via des plateformes comme Udemy (développement web, back-end, front-end), j’obtiens des certifications comme le <strong>CCST Cisco</strong> et je me forme à <strong>Microsoft Azure</strong> pour le cloud computing. Je commence également à m’intéresser à l’intelligence artificielle, je lis beaucoup sur le sujet et je réalise de petits projets disponibles sur GitHub. Finalement, pour des raisons personnelles, je dois interrompre mes études et commencer à travailler. Je décroche un poste de <strong>technicien informatique à la Commission européenne</strong>, où j’apporte un support niveau 2 à des centaines d’utilisateurs, tout en continuant à apprendre sur mon temps libre.</p>,
+
+    "2025" => @<p>Je prends une décision importante : je démissionne de mon poste pour me réorienter vers ce que j’ai toujours voulu faire — le <strong>développement logiciel</strong>. J’intègre une formation intensive en tant que <strong>Développeur Full Stack .NET orienté cybersécurité</strong> chez Technofutur TIC. Cette formation me permet de maîtriser l’ensemble de la stack .NET (C#, Blazor, ASP.NET, Web API, Entity Framework...), tout en intégrant les bonnes pratiques de sécurité applicative. Je m’y épanouis totalement, et je suis aujourd’hui déterminé à lancer ma carrière de développeur web, avec des compétences solides, une forte motivation et un esprit d’apprentissage constant.</p>,
+
+    _ => @<p>Aucune information pour cette période.</p>
+    };
+}
