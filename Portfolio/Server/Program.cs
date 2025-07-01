@@ -7,6 +7,8 @@ builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true); // 👈
 
+builder.Configuration.AddEnvironmentVariables();
+
 // Voir les erreurs dans la console
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
