@@ -17,13 +17,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 // Configuration du HttpClient pour consommer l'API ASP.NET Core
 // ------------------------------------------------------------
 
-// Tu peux supprimer ce bloc si tu ne fais pas d’authentification spéciale :
-/*
-builder.Services.AddHttpClient("Portfolio.ServerAPI", client =>
-{
-    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-});
-
 // Fournit un HttpClient "Portfolio.ServerAPI" avec token si besoin
 builder.Services.AddScoped(sp =>
     sp.GetRequiredService<IHttpClientFactory>().CreateClient("Portfolio.ServerAPI"));
