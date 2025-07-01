@@ -2,6 +2,11 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true); // 👈
+
 // Voir les erreurs dans la console
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
