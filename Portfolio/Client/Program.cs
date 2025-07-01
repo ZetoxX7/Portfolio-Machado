@@ -20,7 +20,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 // Fournit un HttpClient "Portfolio.ServerAPI" avec token si besoin
 builder.Services.AddScoped(sp =>
     sp.GetRequiredService<IHttpClientFactory>().CreateClient("Portfolio.ServerAPI"));
-*/
 
 // ✅ HttpClient utilisé pour appeler ton API backend
 builder.Services.AddScoped(sp =>
