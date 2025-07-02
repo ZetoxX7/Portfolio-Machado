@@ -1,0 +1,6 @@
+[build]
+  command = "dotnet publish Portfolio/Client/Portfolio.Client.csproj -c Release -o dist"
+  publish = "dist/wwwroot"
+
+[context.production.environment]
+  DOTNET_VERSION = "7.0.100"
