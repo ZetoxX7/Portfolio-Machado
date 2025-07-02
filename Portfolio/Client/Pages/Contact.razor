@@ -77,7 +77,7 @@
         try
         {
             // Appel de l’API POST /api/contact avec le contenu du formulaire
-            var response = await Http.PostAsJsonAsync("https://portfolio-machado.up.railway.app/api/contact", formModel);
+            var response = await Http.PostAsJsonAsync("https://portfolio-machado-production.up.railway.app/api/contact", formModel);
 
             if (response.IsSuccessStatusCode)
             {
