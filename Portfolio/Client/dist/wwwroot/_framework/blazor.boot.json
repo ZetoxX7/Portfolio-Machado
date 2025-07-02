@@ -1,7 +1,7 @@
 {
   "entryAssembly": "Portfolio.Client",
   "resources": {
-    "hash": "sha256-QKpKxs19bl5TPjSRCAOfaDVIQKkORP+cGFJQ2aOZwjY=",
+    "hash": "sha256-fu2yssK83Dxu3nxAkL29TkdB3D438Ti8iBjy2xecGaQ=",
     "runtime": {
       "dotnet.js": "sha256-eaJTmow4t8eE7FZMZR5Ja41JMOefGCbIYDTdpclGsac=",
       "dotnet.timezones.blat": "sha256-gbATD5HDsHYtW8vdPYh9iSBY4O5CjvMeCSF5xXWF1xo=",
@@ -21,14 +21,15 @@
       "Microsoft.Extensions.Configuration.Json.dll": "sha256-cExG38CE8o5ZvGtX3QOAoQ0Af9yAepDFA4Me5F7vucg=",
       "Microsoft.Extensions.DependencyInjection.Abstractions.dll": "sha256-EuHh+IPxSp2AKbKxHPfp14bMjJsQU33zElqK5cDIW/Y=",
       "Microsoft.Extensions.DependencyInjection.dll": "sha256-fPnCYz23JtKRouQQQTGZO+910w6uieRI10EECpruHRs=",
+      "Microsoft.Extensions.Http.dll": "sha256-um2+SLX0JwMgAUUhaMWCUnqMnE/O3VYSiwArbKwRW8w=",
       "Microsoft.Extensions.Logging.Abstractions.dll": "sha256-5clQu+aoqp2nZn5ZBzkOqP7Sob25PthIk45+UEjWh8k=",
       "Microsoft.Extensions.Logging.dll": "sha256-QtcS8wmdiPr7JZoP8WPg88LMw1ECesWBvgG7CLgauPk=",
       "Microsoft.Extensions.Options.dll": "sha256-Cl6IAJOmUTl141a1qMzK5/12JbGJ6qzGNVuKKx7WeS4=",
       "Microsoft.Extensions.Primitives.dll": "sha256-TC9k/FatHcMyVjSaSl+o90l9NWdnl2/05D7TKkwJcp0=",
       "Microsoft.JSInterop.dll": "sha256-Kaqk/Rh8zE3QsiT5f7VXsd641EKFJR/y0Lp7FH4bJwc=",
       "Microsoft.JSInterop.WebAssembly.dll": "sha256-lIj/y8P2id3fPTRMmeyVQ7A2pOxHz0JKK0TZjU9oSH4=",
-      "Portfolio.Client.dll": "sha256-cis1V75Q92lnki5kTI3+6k4b9a9XG9sRT9WHqNGjUsg=",
-      "Portfolio.Shared.dll": "sha256-EBF1zM4CHxejVR3NKP/+Lpehd0JC7/EzUcxEyhC/7S4=",
+      "Portfolio.Client.dll": "sha256-xBQh1fZbOLsLghxc0tLx7n4qztq9x9xA+VoInwd7tLM=",
+      "Portfolio.Shared.dll": "sha256-KZXSMelNLrmObl05UtXpmOkuSMV0Jm0GT92bQnJaVMs=",
       "System.Collections.Concurrent.dll": "sha256-8egrgjakVHJO9CCmvCgLm+F9MGqt1fqCn336ztxwwL4=",
       "System.Collections.dll": "sha256-tLY7tCzPpD4usnhJapRwcZcR4Two3emEn2ufPFE3aCo=",
       "System.Collections.NonGeneric.dll": "sha256-veKOhIJQP/YXfpWuwmE7l0gT5jrCeutj9xeuEeoEKDU=",

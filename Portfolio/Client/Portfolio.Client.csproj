@@ -22,10 +22,12 @@
     <Folder Include="Shared\" />
   </ItemGroup>
 
-<ItemGroup>
-    <Content Include="_redirects">
+  <ItemGroup>
+    <None Update="_redirects">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      <TargetPath>wwwroot/_redirects</TargetPath> <!-- Ajout important -->
+    </None>
   </ItemGroup>
 
 </Project>
