@@ -1,0 +1,50 @@
+﻿@page "/projets"
+@using Shared
+
+<h2 class="text-center my-4">Mes projets</h2>
+
+<div class="container">
+    <div class="row">
+        @foreach (var project in projects)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm" @onclick="() => OpenGitHub(project.GitHubUrl)" style="cursor: pointer;">
+                    <img src="@project.ImageUrl" class="card-img-top" alt="@project.Title" style="height: 200px; object-fit: cover;" />
+                    <div class="card-body">
+                        <h5 class="card-title">@project.Title</h5>
+                        <p class="card-text">@project.Description</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<ProjectModel> projects = new()
+    {
+        new ProjectModel
+        {
+            Title = "Mon Portfolio",
+            Description = "Un site web personnel en Blazor pour présenter mes compétences et projets.",
+            ImageUrl = "/images/portfolio.jpg",
+            GitHubUrl = "https://github.com/ton-user/Portfolio"
+        },
+        new ProjectModel
+        {
+            Title = "IPTV Shop",
+            Description = "Application de commande d’abonnements IPTV avec gestion automatisée.",
+            ImageUrl = "/images/iptv.jpg",
+            GitHubUrl = "https://github.com/ton-user/IPTVShop"
+        }
+        // Tu peux en ajouter autant que tu veux ici
+    };
+
+    private void OpenGitHub(string url)
+    {
+        NavigationManager.NavigateTo(url, true);
+    }
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+}
