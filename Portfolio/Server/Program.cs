@@ -2,16 +2,14 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuration des fichiers appsettings
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true); // 👈
+    .AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables(); // 👉 variables d'environnement
 
-builder.Configuration.AddEnvironmentVariables();
-
-
-
-// Voir les erreurs dans la console
+// Logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
@@ -19,26 +17,20 @@ builder.Logging.AddConsole();
 // Enregistrement des services utilisés par l'application
 // ------------------------------------------------------------
 
-// Ajoute le support des contrôleurs d'API + vues Razor (MVC)
 builder.Services.AddControllersWithViews();
-
-// Ajoute le support des Razor Pages (pages .cshtml)
 builder.Services.AddRazorPages();
 
 // 🔐 Configuration de la politique CORS
-// Cela permet au front-end (ex: Blazor WebAssembly) d'accéder à l'API
-// depuis un domaine différent (localhost ou Netlify)
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins(
-                "https://localhost:5172",         // Front local Blazor WebAssembly
-                "https://https://portfolio-sachamachadoalbino.netlify.app/"     // Domaine de production (Netlify)
+    options.AddPolicy("AllowFrontend",
+        policy => policy
+            .WithOrigins(
+                "https://localhost:5172", // dev local
+                "https://portfolio-sachamachadoalbino.netlify.app/"
             )
-            .AllowAnyMethod()    // Autorise toutes les méthodes HTTP : GET, POST, etc.
-            .AllowAnyHeader();   // Autorise tous les headers (utile pour JSON, Auth...)
-    });
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 });
 
 // ------------------------------------------------------------
@@ -47,56 +39,32 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // ------------------------------------------------------------
-// Configuration du middleware HTTP
+// Configuration du pipeline HTTP
 // ------------------------------------------------------------
-
 if (app.Environment.IsDevelopment())
 {
-    // En mode développement : active les outils de débogage WebAssembly
     app.UseWebAssemblyDebugging();
 }
 else
 {
-    // En production : active la politique HSTS (sécurité HTTPS)
     app.UseHsts();
 }
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowFrontend",
-        policy => policy
-            .WithOrigins("https://portfolio-sachamachadoalbino.netlify.app")
-            .AllowAnyMethod()
-            .AllowAnyHeader());
-});
-
-// Active le CORS pour permettre les appels cross-origin du client
-app.UseCors("AllowFrontend");
-
-// Redirige automatiquement HTTP → HTTPS
+// ✅ Middleware
 app.UseHttpsRedirection();
-
-// Configure les fichiers nécessaires pour faire tourner une app Blazor WebAssembly
 app.UseBlazorFrameworkFiles();
-
-// Sert les fichiers statiques (CSS, JS, images, etc.)
 app.UseStaticFiles();
-
-// Active le système de routage (URLs vers les bons contrôleurs/pages)
 app.UseRouting();
+app.UseCors("AllowFrontend"); // 👉 ici après UseRouting
+app.UseAuthorization(); // si jamais tu en ajoutes
 
 // ------------------------------------------------------------
-// Mappage des routes vers les pages / API
+// Routage
 // ------------------------------------------------------------
-
-// Active les Razor Pages (si tu en as)
 app.MapRazorPages();
-
-// Active les contrôleurs API (comme ton ContactController)
 app.MapControllers();
-
-// Redirige toute URL inconnue vers index.html (pour Blazor SPA)
 app.MapFallbackToFile("index.html");
 
-// Démarre l'application ASP.NET Core
+app.Urls.Add("http://+:8080");
+
 app.Run();
