@@ -20,7 +20,7 @@ namespace Portfolio.Server.Controllers
 
         // Méthode appelée en POST : /api/contact
         [HttpPost]
-        public IActionResult Send([FromBody] ContactMessage message)
+        public IActionResult Send([FromBody] ContactModel message)
         {
             // Vérifie que les données reçues sont valides (via les [Required] du modèle)
             if (!ModelState.IsValid)

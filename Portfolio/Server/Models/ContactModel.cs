@@ -5,7 +5,7 @@ namespace Portfolio.Server.Models
     /// <summary>
     /// Représente un message envoyé depuis le formulaire de contact.
     /// </summary>
-    public class ContactMessage
+    public class ContactModel
     {
         [Required(ErrorMessage = "Le nom est requis.")]
         public string Name { get; set; }

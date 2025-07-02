@@ -27,7 +27,8 @@ builder.Services.AddCors(options =>
         policy => policy
             .WithOrigins(
                 "https://localhost:5172", // dev local
-                "https://portfolio-sachamachadoalbino.netlify.app/"
+                "https://portfolio-sachamachadoalbino.netlify.app",
+                "https://portfolio-machado.up.railway.app"
             )
             .AllowAnyMethod()
             .AllowAnyHeader());
